@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -80,7 +81,19 @@ func (crawler *mediaCrawler) handleFile(path string, info os.FileInfo, err error
 		}
 
 		fmt.Println(mfi.String())
-		mkv.Parse(path)
+		info, err := mkv.Parse(path)
+
+		if err != nil {
+			log.Print(err)
+		}
+
+		js, err := json.MarshalIndent(info, "", "  ")
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+
+		fmt.Printf("%s\n", js)
+
 		// getTags(path)
 	}
 
