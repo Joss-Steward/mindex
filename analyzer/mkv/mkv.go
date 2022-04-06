@@ -14,7 +14,7 @@ type Info struct {
 
 func NewMKV() *Info {
 	mkvInfo := &Info{
-		Tracks: make([]*Track, 3),
+		Tracks: make([]*Track, 0),
 	}
 
 	return mkvInfo

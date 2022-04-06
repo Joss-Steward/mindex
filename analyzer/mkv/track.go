@@ -22,11 +22,15 @@ var (
 	ErrorDuplicateTrackTypeToken = errors.New("track type token found but track type is already set")
 	ErrorDuplicateCodecToken     = errors.New("track codec token found but track codec is already set")
 	ErrorDuplicateLanguageToken  = errors.New("track language token found but track language is already set")
+	ErrorDuplicatedDefaultFlag   = errors.New("track default flag token found but track default is already set")
+	ErrorDuplicatedForcedFlag    = errors.New("track forced flag token found but track default is already set")
 
-	ErrorTrackIDWithoutTrack   = errors.New("track ID token found without track element")
-	ErrorTrackTypeWithoutTrack = errors.New("track type token found without track element")
-	ErrorCodecWithoutTrack     = errors.New("track codec token found without track element")
-	ErrorLanguageWithoutTrack  = errors.New("track language token found without track element")
+	ErrorTrackIDWithoutTrack     = errors.New("track ID token found without track element")
+	ErrorTrackTypeWithoutTrack   = errors.New("track type token found without track element")
+	ErrorCodecWithoutTrack       = errors.New("track codec token found without track element")
+	ErrorLanguageWithoutTrack    = errors.New("track language token found without track element")
+	ErrorDefaultFlagWithoutTrack = errors.New("track default flag token found without track element")
+	ErrorForcedFlagWithoutTrack  = errors.New("track forced flag token found without track element")
 )
 
 // https://www.matroska.org/technical/elements.html
@@ -49,6 +53,8 @@ type Track struct {
 	TrackType *int64
 	Codec     *string
 	Language  *string
+	Default   *bool
+	Forced    *bool
 
 	Video *Video
 	Audio *Audio
@@ -177,10 +183,36 @@ func (t *Track) SetLanguage(language string) error {
 		return ErrorLanguageWithoutTrack
 	}
 
-	if t.Codec != nil {
+	if t.Language != nil {
 		return ErrorDuplicateLanguageToken
 	}
 
 	t.Language = &language
+	return nil
+}
+
+func (t *Track) SetFlagDefault(flag bool) error {
+	if t == nil {
+		return ErrorDefaultFlagWithoutTrack
+	}
+
+	if t.Default != nil {
+		return ErrorDuplicatedDefaultFlag
+	}
+
+	t.Default = &flag
+	return nil
+}
+
+func (t *Track) SetFlagForced(flag bool) error {
+	if t == nil {
+		return ErrorForcedFlagWithoutTrack
+	}
+
+	if t.Forced != nil {
+		return ErrorDuplicatedForcedFlag
+	}
+
+	t.Forced = &flag
 	return nil
 }

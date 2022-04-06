@@ -52,7 +52,7 @@ func (p *parser) HandleString(id mkvparse.ElementID, value string, info mkvparse
 		return p.mkvInfo.SetTitle(value)
 	case mkvparse.LanguageElement:
 		return p.track.SetLanguage(value)
-	case mkvparse.CodecNameElement:
+	case mkvparse.CodecIDElement:
 		return p.track.SetCodec(value)
 	}
 
@@ -95,6 +95,10 @@ func (p *parser) HandleInteger(id mkvparse.ElementID, value int64, info mkvparse
 		}
 
 		return ErrorAudioElementNotStarted
+	case mkvparse.FlagDefaultElement:
+		return p.track.SetFlagDefault(value != 0)
+	case mkvparse.FlagForcedElement:
+		return p.track.SetFlagForced(value != 0)
 	}
 
 	return nil
