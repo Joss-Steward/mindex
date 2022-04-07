@@ -43,7 +43,7 @@ func (crawler *Crawler) handleFile(path string, info os.FileInfo, err error) err
 
 	mf, err := analyzer.Analyze(path, info, crawler.config.Hash)
 	if err != nil {
-		log.Printf("skipping '%s': %s", path, err.Error())
+		// log.Printf("skipping '%s': %s", path, err.Error())
 	} else {
 		fmt.Println(mf.String())
 	}
